@@ -33,10 +33,25 @@
   }
 }
 
-.card {
+.station {
   padding: 2em;
+  background-color: rgb(20, 20, 20);
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 15px;
+  margin-bottom: 10px;
 }
 
-.read-the-docs {
-  color: #888;
+.station:hover {
+  filter: drop-shadow(0 0 1em #ccceffaa);
+}
+
+.station-expanded {
+  padding: 2em;
+  background-color: rgb(30, 30, 30);
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-align: left;
 }
