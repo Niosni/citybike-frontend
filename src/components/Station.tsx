@@ -30,27 +30,27 @@ interface StationProps {
 
 const Station = ({ station }: StationProps) => {
   const [expanded, setExpanded] = useState(false)
-  const [extraInfo, setextraInfo] = useState<ExtraInfo>({
-    averageDuration:0,
-    averageDistance:0,
-    totalDepartures:0,
-    totalReturns:0
-  })
   const [loading, setLoading] = useState(false)
+  const [extraInfo, setextraInfo] = useState<ExtraInfo>()
 
   const toggleExpansion = () => {
-    if (!expanded) {
-      // Expand station and fetch extra information
-      setLoading(true)
+    if (!expanded && !extraInfo) {
+      fetchExtraInfo(station)
+    }
+    setExpanded(!expanded)
+  }
+
+  const fetchExtraInfo = (station: Station) => {
+    setLoading(true)
       stationService.getDepartures(station.id)
         .then((departuresArray: Journey[]) => {
 
-          const updatedInfo = calculateExtraInfo(departuresArray)
+          const departureInfo = calculateDepartureExtraInfo(departuresArray)
           stationService.getReturns(station.id)
             .then((returnsArray : Journey[]) => {
               const totalReturns = returnsArray.length
               setextraInfo({
-                ...updatedInfo,
+                ...departureInfo,
                 totalReturns
               })
             })
@@ -64,21 +64,26 @@ const Station = ({ station }: StationProps) => {
         .finally(() => {
           setLoading(false)
         })
-    }
-    setExpanded(!expanded)
-  }
-  const calculateExtraInfo = (departuresArray: Journey[]) => {
+  }  
+
+  const calculateDepartureExtraInfo = (departuresArray: Journey[]) => {
     const averageDuration = _.meanBy(departuresArray, (journey => journey.duration))
     const averageDistance = _.meanBy(departuresArray, (journey => journey.distance))
 
-    const extraInfoObject: ExtraInfo = {
+    const departureInfoObject = {
       averageDuration,
       averageDistance,
       totalDepartures: departuresArray.length,
-      totalReturns: 0
     }
-    setextraInfo(extraInfoObject)
-    return(extraInfoObject)
+    return(departureInfoObject)
+  }
+
+  const getMinutesAndSeconds = (durationInSeconds: number) => {
+    return (
+      <>
+        {Math.floor((durationInSeconds)/60)} min {Math.floor(durationInSeconds)%60} sec
+      </>
+    )
   }
 
   return (
@@ -89,11 +94,11 @@ const Station = ({ station }: StationProps) => {
           <p>Address: {station.station_address}</p>
           {loading ? <p>Loading data...</p> :
           <div>
-            <p>Total departures from this station: {extraInfo.totalDepartures} <br></br>
-              with average duration of {Math.floor((extraInfo.averageDuration)/60)} min {Math.floor(extraInfo.averageDuration)%60} sec
-              and distance of {Math.round(extraInfo.averageDistance)} meters.
+            <p>Total departures from this station: {extraInfo?.totalDepartures} <br></br>
+              with average duration of {getMinutesAndSeconds(extraInfo?.averageDuration ?? 0)} and
+               distance of {Math.round(extraInfo?.averageDistance ?? 0)} meters.
             </p>
-            <p>Total journeys ended here: {extraInfo.totalReturns}</p>
+            <p>Total journeys ended here: {extraInfo?.totalReturns}</p>
           </div>
           }
         </div>
