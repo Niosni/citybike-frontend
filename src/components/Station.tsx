@@ -42,29 +42,29 @@ const Station = ({ station }: StationProps) => {
 
   const fetchExtraInfo = (station: Station) => {
     setLoading(true)
-      stationService.getDepartures(station.id)
-        .then((departuresArray: Journey[]) => {
+    stationService.getDepartures(station.id)
+      .then((departuresArray: Journey[]) => {
 
-          const departureInfo = calculateDepartureExtraInfo(departuresArray)
-          stationService.getReturns(station.id)
-            .then((returnsArray : Journey[]) => {
-              const totalReturns = returnsArray.length
-              setextraInfo({
-                ...departureInfo,
-                totalReturns
-              })
+        const departureInfo = calculateDepartureExtraInfo(departuresArray)
+        stationService.getReturns(station.id)
+          .then((returnsArray : Journey[]) => {
+            const totalReturns = returnsArray.length
+            setextraInfo({
+              ...departureInfo,
+              totalReturns
             })
-            .catch((error) => {
-              console.error('Error fetching returns: ', error)
-            })
-        })
-        .catch((error) => {
-          console.error('Error fetching departures: ', error)
-        })
-        .finally(() => {
-          setLoading(false)
-        })
-  }  
+          })
+          .catch((error) => {
+            console.error('Error fetching returns: ', error)
+          })
+      })
+      .catch((error) => {
+        console.error('Error fetching departures: ', error)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
 
   const calculateDepartureExtraInfo = (departuresArray: Journey[]) => {
     const averageDuration = _.meanBy(departuresArray, (journey => journey.duration))
@@ -93,13 +93,13 @@ const Station = ({ station }: StationProps) => {
         <div className='station-expanded'>
           <p>Address: {station.station_address}</p>
           {loading ? <p>Loading data...</p> :
-          <div>
-            <p>Total departures from this station: {extraInfo?.totalDepartures} <br></br>
+            <div>
+              <p>Total departures from this station: {extraInfo?.totalDepartures} <br></br>
               with average duration of {getMinutesAndSeconds(extraInfo?.averageDuration ?? 0)} and
                distance of {Math.round(extraInfo?.averageDistance ?? 0)} meters.
-            </p>
-            <p>Total journeys ended here: {extraInfo?.totalReturns}</p>
-          </div>
+              </p>
+              <p>Total journeys ended here: {extraInfo?.totalReturns}</p>
+            </div>
           }
         </div>
       )}

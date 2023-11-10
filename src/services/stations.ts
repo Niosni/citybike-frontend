@@ -17,22 +17,22 @@ interface Journey {
 }
 
 const getAll = async (): Promise<Station[]> => {
-  const {data} = await axios.get<Station[]>(baseUrl)
+  const { data } = await axios.get<Station[]>(baseUrl)
   return data
 }
 
 const getStation = async (id: number): Promise<Station> => {
-  const {data} = await axios.get<Station>(`${baseUrl}/${id}`)
+  const { data } = await axios.get<Station>(`${baseUrl}/${id}`)
   return data
 }
 
 const getDepartures = async (id: number): Promise<Journey[]> => {
-  const {data} = await axios.get<Journey[]>(`${baseUrl}/${id}/departures`)
+  const { data } = await axios.get<Journey[]>(`${baseUrl}/${id}/departures`)
   return data
 }
 
 const getReturns = async (id: number): Promise<Journey[]> => {
-  const {data} = await axios.get<Journey[]>(`${baseUrl}/${id}/returns`)
+  const { data } = await axios.get<Journey[]>(`${baseUrl}/${id}/returns`)
   return data
 }
 

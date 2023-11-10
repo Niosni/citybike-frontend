@@ -18,7 +18,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await stationService.getAll();
+        const response = await stationService.getAll()
         setStations(response.sort((a: Station, b: Station) => a.station_name.localeCompare(b.station_name)))
 
       } catch (error) {
