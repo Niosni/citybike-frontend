@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import stationService from '../services/stations'
 import _ from 'lodash'
 
@@ -33,13 +33,7 @@ const Station = ({ station, hideButton }: StationProps) => {
   const [loading, setLoading] = useState(false)
   const [extraInfo, setextraInfo] = useState<ExtraInfo>()
 
-  useEffect(() => {
-    if (!extraInfo) {
-      fetchExtraInfo(station)
-    }
-  }, [])
-
-  const fetchExtraInfo = (station: Station) => {
+  const fetchExtraInfo = useCallback((station: Station) => {
     setLoading(true)
     stationService.getDepartures(station.id)
       .then((departuresArray: Journey[]) => {
@@ -63,7 +57,13 @@ const Station = ({ station, hideButton }: StationProps) => {
       .finally(() => {
         setLoading(false)
       })
-  }
+  }, [])
+
+  useEffect(() => {
+    if (!extraInfo) {
+      fetchExtraInfo(station)
+    }
+  }, [extraInfo, fetchExtraInfo, station])
 
   const calculateDepartureExtraInfo = (departuresArray: Journey[]) => {
     const averageDuration = _.meanBy(departuresArray, (journey => journey.duration))
