@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
-import StationCard from './components/Station'
+import StationCard from './components/StationCard'
+import StationListComponent from './components/Station'
 import stationService from './services/stations'
 
 interface Station {
@@ -16,6 +17,7 @@ function App() {
   const [stations, setStations] = useState<Station[]>([])
   const [filterValue, setFilterValue] = useState('')
   const [stationsToShow, setStationsToShow] = useState<Station[]>([])
+  const [showStationInfo, setShowStationInfo] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,11 +36,16 @@ function App() {
   const StationsList = () => {
     return (
       <>
+        <div className='station-headers'>
+          <div>Station name</div>
+          <div>Address</div>
+        </div>
         {stationsToShow.length > 0 ? '' : 'None match '}
         {stationsToShow.map(station =>
-          <StationCard
+          <StationListComponent
             key={station.id}
             station={station}
+            showButton={showButton}
           />
         )}
       </>
@@ -52,6 +59,12 @@ function App() {
       station.station_name.toLowerCase().includes(newFilterValue.toLowerCase())
     )
     setStationsToShow(filteredStations)
+    if (filteredStations.length === 1) {
+      setShowStationInfo(true)
+    }
+    else {
+      setShowStationInfo(false)
+    }
   }
 
   const StationsFilter = () => {
@@ -67,12 +80,25 @@ function App() {
     )
   }
 
+  const showButton = (station: Station) => {
+    setStationsToShow([station])
+    setShowStationInfo(true)
+  }
+
+  const hideButton = () => {
+    setStationsToShow(stations)
+    setShowStationInfo(false)
+    setFilterValue('')
+  }
+
   return (
     <>
       <h2>Citybike stations</h2>
       {StationsFilter()}
       <div className="stations-list">
-        {StationsList()}
+        { showStationInfo
+          ? <StationCard station={stationsToShow[0]} hideButton={hideButton}/>
+          : StationsList()}
       </div>
     </>
   )
