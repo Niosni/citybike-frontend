@@ -56,7 +56,10 @@ function App() {
     const newFilterValue = String(target.value)
     setFilterValue(newFilterValue)
     const filteredStations = stations.filter(station =>
-      station.station_name.toLowerCase().includes(newFilterValue.toLowerCase())
+      (
+        station.station_name.toLowerCase().includes(newFilterValue.toLowerCase()) ||
+        station.station_address.toLowerCase().includes(newFilterValue.toLowerCase())
+      )
     )
     setStationsToShow(filteredStations)
     if (filteredStations.length === 1) {
