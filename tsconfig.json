@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strictNullChecks": true,
+    "esModuleInterop": true,
 
     "target": "ES2020",
     "useDefineForClassFields": true,
@@ -22,6 +23,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "babel.config.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
