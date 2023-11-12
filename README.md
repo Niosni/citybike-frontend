@@ -7,4 +7,4 @@ Frontend working repository for this my project [citybike app](https://github.co
 3. Run `npm run dev` to start the frontend app.
 
 ## Tests
-Run tests with `npm run test`.
+Run tests with `npm test`.
