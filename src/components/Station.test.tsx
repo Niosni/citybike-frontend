@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
+import { render, screen, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Station from './Station'
+import StationCard from './StationCard'
 import { expect, jest, test } from '@jest/globals'
 
 const mockHandler = jest.fn()
@@ -14,19 +15,42 @@ const station = {
   coordinate_y: '60.2198397844715'
 }
 
-test('renders content', () => {
-  render(<Station station={station} showButton={mockHandler} />)
-  const element = screen.getByText('Alakiventie')
-
-  expect(element).toBeDefined()
+afterEach(() => {
+  cleanup()
 })
 
-test('Clicking the "show details" -button calls event handler once', async () => {
-  render(<Station station={station} showButton={mockHandler} />)
-  const user = userEvent.setup()
+describe('Station list view tests', () => {
+  test('renders content', () => {
+    render(<Station station={station} showButton={mockHandler} />)
+    const element = screen.getByText('Alakiventie')
 
-  const button = screen.getByText('Show details')
-  await user.click(button)
+    expect(element).toBeDefined()
+  })
 
-  expect(mockHandler.mock.calls).toHaveLength(1)
+  test('Clicking the "show details" -button calls event handler once', async () => {
+    render(<Station station={station} showButton={mockHandler} />)
+    const user = userEvent.setup()
+
+    const button = screen.getByText('Show details')
+    await user.click(button)
+
+    expect(mockHandler.mock.calls).toHaveLength(1)
+  }, 3000)
+})
+
+describe('Single station view tests',() => {
+  test('"Loading data" is displayed when Station information is first rendered', () => {
+    render(<StationCard station={station} hideButton={mockHandler} />)
+    const element = screen.getByText('Loading data...')
+    expect(element).toBeDefined()
+  })
+
+  test('Single station details are displayed after 2 second of rendering ', () => {
+    render(<StationCard station={station} hideButton={mockHandler} />)
+    setTimeout( () => {
+      const element = screen.getByText('bikes returned')
+      screen.debug(element)
+      expect(element).toBeDefined()
+    }, 5000)
+  })
 })
