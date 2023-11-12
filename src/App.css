@@ -17,22 +17,23 @@
 }
 
 .stations-list {
-  display: inline-block
+  display: inline-block;
 }
 
 .station {
   display: grid;
   grid-template-columns: 2fr 2fr 1fr;
   align-items: center;
+  margin: 4px;
 }
 
 .station>div {
   padding-left: 8px;
-  padding-top: 4px;
+  padding-top: 0px;
 }
 
 .station:hover {
-  filter: drop-shadow(0 0 0.2em #ccceffaa);
+  background-color: rgb(33, 42, 49);
 }
 
 .station-expanded {
@@ -49,6 +50,6 @@
     background-color: rgb(195, 220, 240);
   }
   .station:hover {
-    filter: drop-shadow(0 0 0.2em #999cffaa);
+    background-color: aliceblue;
   }
 }
