@@ -13,6 +13,7 @@
   grid-template-columns: 2fr 2fr 1fr;
   padding: 5px;
   background-color: rgb(11, 11, 19);
+  border-radius: 4px;
 }
 
 .stations-list {
@@ -22,6 +23,7 @@
 .station {
   display: grid;
   grid-template-columns: 2fr 2fr 1fr;
+  align-items: center;
 }
 
 .station>div {
@@ -30,11 +32,11 @@
 }
 
 .station:hover {
-  filter: drop-shadow(0 0 1em #ccceffaa);
+  filter: drop-shadow(0 0 0.2em #ccceffaa);
 }
 
 .station-expanded {
-  background-color: rgb(8, 54, 59);
+  background-color: rgb(11, 11, 19);
   margin: 0 auto;
   padding: 2rem;
   border-radius: 10px;
@@ -45,5 +47,8 @@
 @media (prefers-color-scheme: light) {
   .station-headers, .station-expanded {
     background-color: rgb(195, 220, 240);
+  }
+  .station:hover {
+    filter: drop-shadow(0 0 0.2em #999cffaa);
   }
 }
