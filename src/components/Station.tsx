@@ -11,6 +11,7 @@ interface StationProps {
   showButton: (station: Station) => void
 }
 
+// Component for short list item style station info
 const Station = ({ station, showButton }: StationProps) => {
 
   return (

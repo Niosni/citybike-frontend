@@ -12,7 +12,7 @@
   display: grid;
   grid-template-columns: 2fr 2fr 1fr;
   padding: 5px;
-  background-color: rgb(10, 10, 15);
+  background-color: rgb(11, 11, 19);
 }
 
 .stations-list {
@@ -25,40 +25,25 @@
 }
 
 .station>div {
-  border: 1px solid #ccceffaa;
   padding-left: 8px;
+  padding-top: 4px;
 }
-/* .stations-list {
-  display: inline-block;
-  padding: 10px;
-}
-
-.station {
-  display: grid;
-  grid-template-columns: 2fr 2fr 1fr;
-  gap: 2px;
-  background-color: rgb(20, 20, 20);
-  padding: 2rem;
-  border-radius: 15px;
-  margin: 0 5px 10px 5px;
-  width: 100%;
-  border: 1px solid green;
-}
-.station>div {
-  float: left;
-  padding: 15px;
-  border: 1px solid red;
-} */
 
 .station:hover {
   filter: drop-shadow(0 0 1em #ccceffaa);
 }
 
 .station-expanded {
-  background-color: rgb(30, 30, 30);
+  background-color: rgb(8, 54, 59);
   margin: 0 auto;
   padding: 2rem;
   border-radius: 10px;
   margin-bottom: 2px;
   text-align: left;
+}
+
+@media (prefers-color-scheme: light) {
+  .station-headers, .station-expanded {
+    background-color: rgb(195, 220, 240);
+  }
 }
