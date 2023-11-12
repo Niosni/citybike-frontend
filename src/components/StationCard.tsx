@@ -29,41 +29,38 @@ interface StationProps {
   hideButton: ()=>void
 }
 
+// Component for expanded station information view
 const Station = ({ station, hideButton }: StationProps) => {
   const [loading, setLoading] = useState(false)
   const [extraInfo, setextraInfo] = useState<ExtraInfo>()
 
-  const fetchExtraInfo = useCallback((station: Station) => {
+  const fetchExtraInfo = useCallback(async () => {
     setLoading(true)
-    stationService.getDepartures(station.id)
-      .then((departuresArray: Journey[]) => {
+    const departuresArray = await stationService.getDepartures(station.id)
+    const returnsArray = await stationService.getReturns(station.id)
 
-        const departureInfo = calculateDepartureExtraInfo(departuresArray)
-        stationService.getReturns(station.id)
-          .then((returnsArray : Journey[]) => {
-            const totalReturns = returnsArray.length
-            setextraInfo({
-              ...departureInfo,
-              totalReturns
-            })
-          })
-          .catch((error) => {
-            console.error('Error fetching returns: ', error)
-          })
-      })
-      .catch((error) => {
-        console.error('Error fetching departures: ', error)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [])
+    const departureInfo = calculateDepartureExtraInfo(departuresArray)
+    const extraInfoObject = {
+      ...departureInfo,
+      totalReturns: returnsArray.length
+    }
+    setextraInfo(extraInfoObject)
+    setLoading(false)
+  }, [station.id])
 
   useEffect(() => {
-    if (!extraInfo) {
-      fetchExtraInfo(station)
+    const fetchData = async () => {
+      await fetchExtraInfo()
     }
-  }, [extraInfo, fetchExtraInfo, station])
+    if (!extraInfo) {
+      try {
+        void fetchData()
+      } catch (error) {
+        console.error(error)
+      }
+
+    }
+  }, [extraInfo, fetchExtraInfo])
 
   const calculateDepartureExtraInfo = (departuresArray: Journey[]) => {
     const averageDuration = _.meanBy(departuresArray, (journey => journey.duration))
